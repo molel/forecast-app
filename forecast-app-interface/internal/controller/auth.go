@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"forecast-app-interface/utils"
 	"github.com/valyala/fasthttp"
+	"google.golang.org/grpc/status"
 )
 
 func (r *Router) HandleRegister(ctx *fasthttp.RequestCtx) {
@@ -12,23 +13,26 @@ func (r *Router) HandleRegister(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	username := ctx.QueryArgs().Peek("username")
-	if len(username) == 0 {
-		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+	username := string(ctx.FormValue("username"))
+	hashedPassword := utils.HashValue(ctx.FormValue("password"))
+
+	if err := r.useCase.Register(username, hex.EncodeToString(hashedPassword)); err != nil {
+		ctx.Error(status.Convert(err).Message(), fasthttp.StatusInternalServerError)
 		return
 	}
 
-	password := ctx.QueryArgs().Peek("password")
-	if len(username) == 0 {
-		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+	token, err := createToken(username)
+	if err != nil {
+		ctx.Error("cannot create token", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	hashedPassword := utils.HashValue(password)
+	cookie := &fasthttp.Cookie{}
+	cookie.SetKey("token")
+	cookie.SetValue(token)
+	ctx.Response.Header.SetCookie(cookie)
 
-	if err := r.useCase.Register(string(username), hex.EncodeToString(hashedPassword)); err != nil {
-		// redirect
-	}
+	ctx.Redirect("/app", fasthttp.StatusSeeOther)
 }
 
 func (r *Router) HandleLogin(ctx *fasthttp.RequestCtx) {
@@ -37,21 +41,24 @@ func (r *Router) HandleLogin(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	username := ctx.QueryArgs().Peek("username")
-	if len(username) == 0 {
-		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+	username := string(ctx.FormValue("username"))
+	hashedPassword := utils.HashValue(ctx.FormValue("password"))
+
+	if err := r.useCase.Login(username, hex.EncodeToString(hashedPassword)); err != nil {
+		ctx.Error(status.Convert(err).Message(), fasthttp.StatusUnauthorized)
 		return
 	}
 
-	password := ctx.QueryArgs().Peek("password")
-	if len(username) == 0 {
-		ctx.SetStatusCode(fasthttp.StatusBadRequest)
+	token, err := createToken(username)
+	if err != nil {
+		ctx.Error("cannot create token", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	hashedPassword := utils.HashValue(password)
+	cookie := &fasthttp.Cookie{}
+	cookie.SetKey("token")
+	cookie.SetValue(token)
+	ctx.Response.Header.SetCookie(cookie)
 
-	if err := r.useCase.Login(string(username), hex.EncodeToString(hashedPassword)); err != nil {
-		// redirect
-	}
+	ctx.Redirect("/app", fasthttp.StatusSeeOther)
 }

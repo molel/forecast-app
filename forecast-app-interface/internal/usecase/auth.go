@@ -3,13 +3,14 @@ package usecase
 import (
 	"context"
 	"fmt"
-	"forecast-app-interface/internal/controller/gen/go/auth"
 	"sync"
+
+	"forecast-app-interface/internal/controller/gen/go/auth"
 )
 
 const (
-	registerErrorTemplate = "cannot register user [username=%s]: %s"
-	loginErrorTemplate    = "cannot login user [username=%s]: %s"
+	registerErrorTemplate = "cannot register user: %w"
+	loginErrorTemplate    = "cannot login user: %w"
 )
 
 var registerRequestsPool = sync.Pool{
@@ -29,16 +30,12 @@ func (u *UseCase) Register(username, password string) error {
 	request.Username = username
 	request.Password = password
 
-	response, err := u.authClient.Register(context.Background(), request)
+	_, err := u.authClient.Register(context.Background(), request)
 	if err != nil {
-		return fmt.Errorf(registerErrorTemplate, username, err)
+		err = fmt.Errorf(registerErrorTemplate, err)
 	}
 
-	if !response.Success {
-		return fmt.Errorf(registerErrorTemplate, username, response.Text)
-	}
-
-	return nil
+	return err
 }
 
 func (u *UseCase) Login(username, password string) error {
@@ -46,14 +43,10 @@ func (u *UseCase) Login(username, password string) error {
 	request.Username = username
 	request.Password = password
 
-	response, err := u.authClient.Login(context.Background(), request)
+	_, err := u.authClient.Login(context.Background(), request)
 	if err != nil {
-		return fmt.Errorf(loginErrorTemplate, username, err)
+		err = fmt.Errorf(loginErrorTemplate, err)
 	}
 
-	if !response.Success {
-		return fmt.Errorf(loginErrorTemplate, username, response.Text)
-	}
-
-	return nil
+	return err
 }
