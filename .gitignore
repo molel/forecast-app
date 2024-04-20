@@ -6,3 +6,6 @@
 
 # vendor files
 vendor
+
+# venv files
+venv
