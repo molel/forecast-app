@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/valyala/fasthttp"
-	"log"
 )
 
 type UseCase interface {
@@ -34,8 +33,7 @@ func (r *Router) Handle(ctx *fasthttp.RequestCtx) {
 	switch string(ctx.Path()) {
 	// static
 	case "/":
-		log.Println(321)
-		ctx.SetStatusCode(fasthttp.StatusOK)
+		r.HandleRoot(ctx)
 
 	// auth
 	case "/register":
@@ -50,12 +48,4 @@ func (r *Router) Handle(ctx *fasthttp.RequestCtx) {
 	default:
 		ctx.SetStatusCode(fasthttp.StatusNotFound)
 	}
-}
-
-func (r *Router) HandleApp(ctx *fasthttp.RequestCtx) {
-	n, err := ctx.WriteString("application response eqtqwrm,g;ernwmglhimer")
-	if err != nil {
-		log.Println(n, err)
-	}
-	ctx.SetStatusCode(fasthttp.StatusOK)
 }

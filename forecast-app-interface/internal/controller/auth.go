@@ -30,6 +30,8 @@ func (r *Router) HandleRegister(ctx *fasthttp.RequestCtx) {
 	cookie := &fasthttp.Cookie{}
 	cookie.SetKey("token")
 	cookie.SetValue(token)
+	cookie.SetKey("username")
+	cookie.SetValue(username)
 	ctx.Response.Header.SetCookie(cookie)
 
 	ctx.Redirect("/app", fasthttp.StatusSeeOther)
@@ -58,6 +60,8 @@ func (r *Router) HandleLogin(ctx *fasthttp.RequestCtx) {
 	cookie := &fasthttp.Cookie{}
 	cookie.SetKey("token")
 	cookie.SetValue(token)
+	cookie.SetKey("username")
+	cookie.SetValue(username)
 	ctx.Response.Header.SetCookie(cookie)
 
 	ctx.Redirect("/app", fasthttp.StatusSeeOther)
