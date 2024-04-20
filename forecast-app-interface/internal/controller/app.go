@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	templates = template.Must(template.ParseGlob("./web/templates/*.html"))
+	templates = template.Must(template.ParseGlob("./web/templates/*.gohtml"))
 )
 
 type app struct {
@@ -45,7 +45,7 @@ func (r *Router) HandleApp(ctx *fasthttp.RequestCtx) {
 		data.Items[i].Value = math.Sin(float64(i))
 	}
 
-	if err := templates.ExecuteTemplate(ctx, "app.html", data); err != nil {
+	if err := templates.ExecuteTemplate(ctx, "app.gohtml", data); err != nil {
 		ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 	}
 
