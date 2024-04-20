@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h2>Login or Register</h2>
+<form id="loginForm" action="http://localhost:8080/login" method="post">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <button type="submit">Login</button>
+</form>
+<br>
+<form id="registerForm" action="http://localhost:8080/register" method="post">
+    <label for="newUsername">New Username:</label><br>
+    <input type="text" id="newUsername" name="username"><br>
+    <label for="newPassword">New Password:</label><br>
+    <input type="password" id="newPassword" name="password"><br><br>
+    <button type="submit">Register</button>
+</form>
+</body>
+</html>
