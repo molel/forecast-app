@@ -1,5 +1,6 @@
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
+import json
 
 import grpc
 
@@ -24,7 +25,7 @@ class PredictServer(predict_pb2_grpc.PredictServiceServicer):
     ) -> predict_pb2.MakePredictResponse:
         items = []
         for i in range(100):
-            items.append(predict_pb2.TimeSeriesItem(ts=datetime.now().timestamp(), value=i))
+            items.append({"ts": (datetime.now() + timedelta(days=i)).timestamp(), "value": i})
         return predict_pb2.MakePredictResponse(
             items=items
         )
@@ -34,12 +35,13 @@ class PredictServer(predict_pb2_grpc.PredictServiceServicer):
             request: predict_pb2.GetPredictRequest,
             context: grpc.aio.ServicerContext
     ) -> predict_pb2.GetPredictResponse:
+        data = {"unit": "samples"}
         items = []
         for i in range(100):
-            items.append(predict_pb2.TimeSeriesItem(ts=datetime.now().timestamp(), value=- i))
+            items.append({"ts": int((datetime.now() + timedelta(days=i)).timestamp() * 1e9), "value": i})
+        data['items'] = items
         return predict_pb2.GetPredictResponse(
-            unit='шт',
-            items=items
+            data=json.dumps(data).encode('UTF-8')
         )
 
 

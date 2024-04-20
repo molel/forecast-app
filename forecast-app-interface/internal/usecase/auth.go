@@ -35,6 +35,8 @@ func (u *UseCase) Register(username, password string) error {
 		err = fmt.Errorf(registerErrorTemplate, err)
 	}
 
+	registerRequestsPool.Put(request)
+
 	return err
 }
 
@@ -47,6 +49,8 @@ func (u *UseCase) Login(username, password string) error {
 	if err != nil {
 		err = fmt.Errorf(loginErrorTemplate, err)
 	}
+
+	loginRequestsPool.Put(request)
 
 	return err
 }

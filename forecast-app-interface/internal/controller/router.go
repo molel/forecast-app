@@ -15,8 +15,8 @@ type AuthUseCase interface {
 }
 
 type ForecastUseCase interface {
-	MakeForecast(name string, data []byte) ([]byte, error)
-	GetForecast(name string) ([]byte, error)
+	MakeForecast(username, name string, data []byte) ([]byte, error)
+	GetForecast(username, name string) ([]byte, error)
 }
 
 type Router struct {

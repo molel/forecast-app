@@ -14,7 +14,7 @@ import (
 
 func Run(cfg *config.Config) {
 	useCase := usecase.NewUseCase()
-	if err := useCase.Init(cfg.AuthServiceAddress); err != nil {
+	if err := useCase.Init(cfg.AuthServiceAddress, cfg.PredictServiceAddress); err != nil {
 		log.Fatalf("Cannot init use case: %s\n", err)
 	}
 

@@ -1,30 +1,34 @@
 package controller
 
 import (
-	"github.com/valyala/fasthttp"
+	"encoding/json"
+	"forecast-app-interface/utils"
 	"html/template"
-	"math"
-	"time"
+	"slices"
+
+	"github.com/valyala/fasthttp"
 )
 
 var (
-	templates = template.Must(template.ParseGlob("./web/templates/*.gohtml"))
+	templates = template.
+		Must(
+			template.
+				New("").
+				Funcs(template.FuncMap{"formatTs": utils.FormatTs}).
+				ParseGlob("./web/templates/*.gohtml"),
+		)
 )
 
-type app struct {
-	Username   string
-	TimeSeries []timeSeries
+type appTemplateData struct {
+	Username string
+	Name     string
+	Unit     string `json:"unit"`
+	Items    []item `json:"items"`
 }
 
-type timeSeries struct {
-	Name  string
-	Unit  string
-	Items []timeSeriesItem
-}
-
-type timeSeriesItem struct {
-	Time  time.Time
-	Value float64
+type item struct {
+	Ts    int64   `json:"ts"`
+	Value float64 `json:"value"`
 }
 
 func (r *Router) HandleRoot(ctx *fasthttp.RequestCtx) {
@@ -43,21 +47,30 @@ func (r *Router) HandleApp(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	data := app{Username: string(ctx.Request.Header.Cookie("username"))}
-	data.TimeSeries = []timeSeries{
-		{
-			Name:  "Time series name",
-			Unit:  "smth",
-			Items: make([]timeSeriesItem, 365),
-		},
-	}
-	now := time.Now().UnixNano()
-	for i := range data.TimeSeries[0].Items {
-		data.TimeSeries[0].Items[i].Time = time.Unix(0, now+int64(time.Duration(i)*time.Hour*24))
-		data.TimeSeries[0].Items[i].Value = math.Sin(float64(i))
+	name := string(ctx.FormValue("name"))
+	username := string(ctx.Request.Header.Cookie("username"))
+
+	templateData := appTemplateData{
+		Username: username,
+		Name:     name,
 	}
 
-	if err := templates.ExecuteTemplate(ctx, "app.gohtml", data); err != nil {
+	if len(name) > 0 {
+		data, err := r.useCase.GetForecast(username, name)
+		if err != nil {
+			templateData.Name = "Не удалось получить данные"
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+		} else if err = json.Unmarshal(data, &templateData); err != nil {
+			templateData.Name = "Не удалось получить данные"
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+		}
+
+		slices.SortStableFunc(templateData.Items, func(a, b item) int {
+			return int(a.Ts - b.Ts)
+		})
+	}
+
+	if err := templates.ExecuteTemplate(ctx, "app.gohtml", templateData); err != nil {
 		ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 	}
 

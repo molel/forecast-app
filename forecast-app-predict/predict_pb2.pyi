@@ -41,9 +41,7 @@ class GetPredictRequest(_message.Message):
     def __init__(self, username: _Optional[str] = ..., name: _Optional[str] = ...) -> None: ...
 
 class GetPredictResponse(_message.Message):
-    __slots__ = ("unit", "items")
-    UNIT_FIELD_NUMBER: _ClassVar[int]
-    ITEMS_FIELD_NUMBER: _ClassVar[int]
-    unit: str
-    items: _containers.RepeatedCompositeFieldContainer[TimeSeriesItem]
-    def __init__(self, unit: _Optional[str] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
+    __slots__ = ("data",)
+    DATA_FIELD_NUMBER: _ClassVar[int]
+    data: bytes
+    def __init__(self, data: _Optional[bytes] = ...) -> None: ...
