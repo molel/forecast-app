@@ -34,10 +34,7 @@
                 Username
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {{range $i, $item := .TimeSeries}}
-                    <a class="dropdown-item" id="{{$item.Name}}_{{$i}}" href="#"
-                       onclick="copyToClipboardOnClick(event)">{{$item.Name}}</a>
-                {{end}}
+
             </div>
         </div>
     </div>
@@ -46,7 +43,7 @@
 
 <div class="container my-2">
     <div class="row">
-        <form class="col" id="searchForm" action="http://localhost/app">
+        <form class="col" id="searchForm" action="./app">
             <div class="row">
                 <div class="col">
                     <input class="form-control" id="forecastSearchInput" type="text" placeholder="Поиск" name="name">
@@ -56,7 +53,7 @@
                 </div>
             </div>
         </form>
-        <form class="col-auto" id="searchForm" action="http://localhost/app">
+        <form class="col-auto" id="searchForm" action="./app">
             <div class="col-auto">
                 <input class="form-control" type="file">
             </div>
@@ -65,46 +62,51 @@
 </div>
 
 <div id="chart-container"></div>
-<script type="text/javascript">
-    Highcharts.chart('chart-container', {
-        chart: {
-            type: 'line',
-        },
-        title: {
-            text: 'График прогноза'
-        },
-        subtitle: {
-            text: 'Источник: мое приложение'
-        },
-        xAxis: {
-            title: {
-                text: 'Дата'
+{{if .Items}}
+    <script type="text/javascript">
+        Highcharts.chart('chart-container', {
+            chart: {
+                type: 'line',
             },
-            categories: [
-                {{- range .Items -}}
-                {{- .Time.Format "02 Jan 2006" -}},
-                {{- end}}
-            ]
-        },
-        yAxis: {
             title: {
-                text: 'Наблюдение'
-            }
-        },
-        plotOptions: {
-            line: {
-                enableMouseTracking: true
-            }
-        },
-        series: [{
-            name: 'Мой временной ряд',
-            data: [
-                {{- range .Items -}}
-                {{- .Value -}},
-                {{- end}}
-            ]
-        }]
-    });
-</script>
+                text: 'График прогноза {{.Name}}'
+            },
+            subtitle: {
+                text: 'Источник: модель предсказания SARIMA'
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: {
+                title: {
+                    text: 'Дата'
+                },
+                categories: [
+                    {{- range .Items -}}
+                    {{- formatTs .Ts -}},
+                    {{- end}}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: 'Наблюдения ({{.Unit}})'
+                },
+            },
+            plotOptions: {
+                line: {
+                    enableMouseTracking: true
+                }
+            },
+            series: [{
+                name: "Значение",
+                data: [
+                    {{- range .Items -}}
+                    {{- .Value -}},
+                    {{- end}}
+                ]
+            }]
+        });
+    </script>
+{{end}}
 </body>
 </html>
