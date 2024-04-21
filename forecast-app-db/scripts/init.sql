@@ -12,10 +12,11 @@ CREATE TABLE measurements_units
 
 CREATE TABLE time_series
 (
-    id       BIGSERIAL PRIMARY KEY,
-    username varchar NOT NULL REFERENCES users (username),
-    unit     VARCHAR NOT NULL REFERENCES measurements_units (name),
-    name     varchar NOT NULL
+    id               BIGSERIAL PRIMARY KEY,
+    username         varchar     NOT NULL REFERENCES users (username),
+    unit             VARCHAR     NOT NULL REFERENCES measurements_units (name),
+    name             varchar     NOT NULL,
+    prediction_start TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE records

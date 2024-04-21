@@ -18,11 +18,12 @@ message MakePredictRequest {
   string username = 1;
   string name = 2;
   string unit = 3;
-  repeated TimeSeriesItem items = 4;
+  int32 period = 4;
+  repeated TimeSeriesItem series = 5;
 }
 
 message MakePredictResponse {
-  repeated TimeSeriesItem items = 1;
+  repeated TimeSeriesItem predict = 1;
 }
 
 message GetPredictRequest {
@@ -31,5 +32,7 @@ message GetPredictRequest {
 }
 
 message GetPredictResponse {
-  bytes data = 1;
+  string unit = 1;
+  repeated TimeSeriesItem series = 2;
+  repeated TimeSeriesItem predict = 3;
 }
