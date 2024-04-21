@@ -19,7 +19,7 @@ message MakePredictRequest {
   string name = 2;
   string unit = 3;
   int32 period = 4;
-  repeated TimeSeriesItem series = 5;
+  bytes series = 5;
 }
 
 message MakePredictResponse {
