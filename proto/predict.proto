@@ -2,15 +2,13 @@ syntax = "proto3";
 
 option go_package = "go/predict";
 
-import "google/protobuf/timestamp.proto";
-
 service PredictService {
   rpc MakePredict (MakePredictRequest) returns (MakePredictResponse);
   rpc GetPredict (GetPredictRequest) returns (GetPredictResponse);
 }
 
 message TimeSeriesItem {
-  google.protobuf.Timestamp ts = 1;
+  int64 ts = 1;
   double value = 2;
 }
 
@@ -23,7 +21,7 @@ message MakePredictRequest {
 }
 
 message MakePredictResponse {
-  repeated TimeSeriesItem predict = 1;
+  repeated TimeSeriesItem items = 1;
 }
 
 message GetPredictRequest {
@@ -33,6 +31,6 @@ message GetPredictRequest {
 
 message GetPredictResponse {
   string unit = 1;
-  repeated TimeSeriesItem series = 2;
-  repeated TimeSeriesItem predict = 3;
+  int64 delimiter = 2;
+  repeated TimeSeriesItem items = 3;
 }

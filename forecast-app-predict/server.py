@@ -35,13 +35,14 @@ class PredictServer(predict_pb2_grpc.PredictServiceServicer):
             request: predict_pb2.GetPredictRequest,
             context: grpc.aio.ServicerContext
     ) -> predict_pb2.GetPredictResponse:
-        data = {"unit": "samples"}
         items = []
         for i in range(100):
-            items.append({"ts": int((datetime.now() + timedelta(days=i)).timestamp() * 1e9), "value": i})
-        data['items'] = items
+            items.append(
+                predict_pb2.TimeSeriesItem(ts=int((datetime.now() + timedelta(days=i)).timestamp() * 1e9), value=i))
         return predict_pb2.GetPredictResponse(
-            data=json.dumps(data).encode('UTF-8')
+            unit='шт',
+            delimiter=int(len(items) * 0.8),
+            items=items
         )
 
 
