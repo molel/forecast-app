@@ -13,16 +13,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        function copyToClipboardOnClick(event) {
-            let input = document.getElementById('forecastSearchInput');
-            let clicked = document.getElementById(event.target.id);
-            let button = document.getElementById('forecastSearchButton');
-            input.value = clicked.text;
-            button.click();
-            console.log("button clicker")
-        }
-    </script>
 </head>
 <body>
 <header class="navbar navbar-expand-lg navbar-light bg-primary px-2">
@@ -43,7 +33,7 @@
 
 <div class="container my-2">
     <div class="row">
-        <form class="col" id="searchForm" action="./app">
+        <form class="col" id="searchForm" action="/app/get">
             <div class="row">
                 <div class="col">
                     <input class="form-control" id="forecastSearchInput" type="text" placeholder="Поиск" name="name">
@@ -62,7 +52,7 @@
 </div>
 
 <div id="chart-container"></div>
-{{if .Items}}
+{{if .Unit}}
     <script type="text/javascript">
         Highcharts.chart('chart-container', {
             chart: {
@@ -99,10 +89,21 @@
             },
             series: [{
                 name: "Значение",
+                zoneAxis: 'x',
                 data: [
                     {{- range .Items -}}
                     {{- .Value -}},
                     {{- end}}
+                ],
+                zones: [
+                    {
+                        value: 0,
+                        color: 'blue'
+                    },
+                    {
+                        value:  {{.Delimiter}},
+                        color: 'orange'
+                    }
                 ]
             }]
         });

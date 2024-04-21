@@ -21,17 +21,23 @@ func (r *Router) HandleRegister(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	token, err := createToken(username)
+	token, expiration, err := createToken(username)
 	if err != nil {
 		ctx.Error("cannot create token", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	cookie := &fasthttp.Cookie{}
+	cookie := fasthttp.AcquireCookie()
+	defer fasthttp.ReleaseCookie(cookie)
+
+	cookie.Reset()
+
 	cookie.SetKey("token")
 	cookie.SetValue(token)
 	cookie.SetKey("username")
 	cookie.SetValue(username)
+	cookie.SetExpire(expiration)
+
 	ctx.Response.Header.SetCookie(cookie)
 
 	ctx.Redirect("/app", fasthttp.StatusSeeOther)
@@ -51,17 +57,25 @@ func (r *Router) HandleLogin(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	token, err := createToken(username)
+	token, expiration, err := createToken(username)
 	if err != nil {
 		ctx.Error("cannot create token", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	cookie := &fasthttp.Cookie{}
+	cookie := fasthttp.AcquireCookie()
+	defer fasthttp.ReleaseCookie(cookie)
+
+	cookie.Reset()
 	cookie.SetKey("token")
 	cookie.SetValue(token)
+	cookie.SetExpire(expiration)
+	ctx.Response.Header.SetCookie(cookie)
+
+	cookie.Reset()
 	cookie.SetKey("username")
 	cookie.SetValue(username)
+	cookie.SetExpire(expiration)
 	ctx.Response.Header.SetCookie(cookie)
 
 	ctx.Redirect("/app", fasthttp.StatusSeeOther)

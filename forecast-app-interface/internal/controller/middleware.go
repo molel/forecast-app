@@ -25,19 +25,20 @@ func AuthMiddleware(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	}
 }
 
-func createToken(username string) (string, error) {
+func createToken(username string) (string, time.Time, error) {
+	expiration := time.Now().Add(time.Hour * 24)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"username": username,
-			"exp":      time.Now().Add(time.Hour * 24).Unix(),
+			"exp":      expiration.Unix(),
 		})
 
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
-		return "", err
+		return "", time.Time{}, err
 	}
 
-	return tokenString, nil
+	return tokenString, expiration, nil
 }
 
 func verifyToken(tokenString string) error {

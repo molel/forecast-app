@@ -15,8 +15,8 @@ type AuthUseCase interface {
 }
 
 type ForecastUseCase interface {
-	MakeForecast(username, name string, data []byte) ([]byte, error)
-	GetForecast(username, name string) ([]byte, error)
+	MakeForecast(username, name, unit string, period int32, series []byte) (any, error)
+	GetForecast(username, name string) (string, int64, any, error)
 }
 
 type Router struct {
@@ -44,8 +44,12 @@ func (r *Router) Handle(ctx *fasthttp.RequestCtx) {
 	// main
 	case "/app":
 		AuthMiddleware(r.HandleApp)(ctx)
+	case "/app/get":
+		AuthMiddleware(r.HandleGetPredict)(ctx)
+	case "/app/predict":
+		AuthMiddleware(r.HandleGetPredict)(ctx)
 
 	default:
-		ctx.SetStatusCode(fasthttp.StatusNotFound)
+		ctx.Redirect("/app", fasthttp.StatusSeeOther)
 	}
 }
