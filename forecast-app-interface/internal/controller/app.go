@@ -185,8 +185,7 @@ func (r *Router) HandleMakePredict(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	ProcessTemplate(ctx, fasthttp.StatusOK, "app.gohtml", templateData)
-	return
+	ctx.Redirect("/app", fasthttp.StatusSeeOther)
 }
 
 func ProcessTemplate(ctx *fasthttp.RequestCtx, statusCode int, templateName string, templateData any) {

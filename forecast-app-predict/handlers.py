@@ -20,10 +20,10 @@ class PredictHandler(object):
         )
         self.queue = queue
         register_log_queue(log_queue)
-        self.time_deltas = {24: 8.64e+13}
-        self.time_deltas[7] = self.time_deltas[24] * 7
-        self.time_deltas[4] = self.time_deltas[7] * 4
-        self.time_deltas[12] = self.time_deltas[4] * 12
+        self.time_deltas = {24: 3.6e+12}
+        self.time_deltas[7] = self.time_deltas[24] * 24
+        self.time_deltas[4] = self.time_deltas[7] * 7
+        self.time_deltas[12] = self.time_deltas[4] * 4
         self.make_prediction()
 
     def make_prediction(self):
