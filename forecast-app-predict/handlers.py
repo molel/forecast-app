@@ -20,6 +20,10 @@ class PredictHandler(object):
         )
         self.queue = queue
         register_log_queue(log_queue)
+        self.time_deltas = {24: 8.64e+13}
+        self.time_deltas[7] = self.time_deltas[24] * 7
+        self.time_deltas[4] = self.time_deltas[7] * 4
+        self.time_deltas[12] = self.time_deltas[4] * 12
         self.make_prediction()
 
     def make_prediction(self):
@@ -39,7 +43,7 @@ class PredictHandler(object):
                 max_D=2, max_d=2,
                 alpha=0.05,
                 test='kpss',
-                seasonal_test='ocsb',
+                seasonal_test='ch',
 
                 trace=True,
                 error_action='ignore',
@@ -51,11 +55,15 @@ class PredictHandler(object):
             )
             logging.info(f'Make prediction: {request} finished training')
 
-            x_pred, _ = arima_model.predict(
+            predictions, _ = arima_model.predict(
                 n_periods=request.predict_periods,
                 return_conf_int=True,
                 alpha=0.05
             )
+
+            items = [(item.ts, item.value) for item in request.items]
+            for i in range(request.predict_periods):
+                items.append((items[-1][0] + self.time_deltas[request.period], predictions[i]))
 
             self.save_prediction(
                 username=request.username,
@@ -63,7 +71,7 @@ class PredictHandler(object):
                 name=request.name,
                 period=request.period,
                 predict_start=len(request.items),
-                items=[]
+                items=items
             )
 
             logging.info(f'Make prediction: {request} saved')
@@ -113,15 +121,17 @@ class PredictHandler(object):
             "INSERT INTO time_series (user_id, unit_id, name,  period, prediction_start) VALUES (%s, %s, %s, %s, %s) RETURNING id;",
             (user_id, unit_id, name, period, predict_start)
         )
-        self.db.commit()
+        # self.db.commit()
         if cursor.rowcount == 0:
             print("error occurred during inserting into time series")
             cursor.close()
             return
         time_series_id = cursor.fetchone()[0]
 
+        # args = ','.join(cursor.mogrify("(%s, %s, %s)", i).decode('utf-8') for i in
+        #                 [(time_series_id, item[0], item[1]) for item in items])
         cursor.executemany(
-            "INSERT INTO records (series_id, ts, value) VALUES (%s, %s, %s);",
+            "INSERT INTO records (series_id, ts, value) VALUES (%s, %s, %s)",
             [(time_series_id, item[0], item[1]) for item in items]
         )
         self.db.commit()
