@@ -7,11 +7,12 @@ import handlers
 import predict_pb2
 import predict_pb2_grpc
 from entities import MakePredictRequestEntity
+from logging.handlers import QueueListener
 
 
 class PredictServer(predict_pb2_grpc.PredictServiceServicer):
-    def __init__(self, config: argparse.Namespace, queue: multiprocessing.Queue):
-        self.db = handlers.GetHandler(config)
+    def __init__(self, config: argparse.Namespace, queue: multiprocessing.Queue, log_queue: multiprocessing.Queue):
+        self.db = handlers.GetHandler(config, log_queue)
         self.queue = queue
         super(PredictServer, self).__init__()
 
@@ -51,10 +52,12 @@ class PredictServer(predict_pb2_grpc.PredictServiceServicer):
 
 
 async def serve(config: argparse.Namespace) -> None:
-    queue = multiprocessing.Manager().Queue()
+    manager = multiprocessing.Manager()
+    queue = manager.Queue()
+    log_queue = manager.Queue()
 
     grpc_server = grpc.aio.server()
-    prediction_server = PredictServer(config, queue)
+    prediction_server = PredictServer(config, queue, log_queue)
     predict_pb2_grpc.add_PredictServiceServicer_to_server(prediction_server, grpc_server)
 
     listen_addr = f'localhost:{config.http}'
@@ -62,6 +65,12 @@ async def serve(config: argparse.Namespace) -> None:
     print(f'Starting grpc_server on {listen_addr}')
 
     for i in range(config.pool):
-        multiprocessing.Process(target=handlers.PredictHandler, args=(config, queue)).start()
+        multiprocessing.Process(target=handlers.PredictHandler, args=(config, queue, log_queue)).start()
+
+    log_queue_listener = QueueListener(log_queue)
+    log_queue_listener.start()
+
     await grpc_server.start()
     await grpc_server.wait_for_termination()
+
+    log_queue_listener.stop()

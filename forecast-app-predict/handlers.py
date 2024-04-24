@@ -1,14 +1,16 @@
 import argparse
+import logging
 import multiprocessing
 
 from entities import MakePredictRequestEntity
+from logs import register_log_queue
 import psycopg2
 
 import pmdarima as pm
 
 
 class PredictHandler(object):
-    def __init__(self, config: argparse.Namespace, queue: multiprocessing.Queue):
+    def __init__(self, config: argparse.Namespace, queue: multiprocessing.Queue, log_queue: multiprocessing.Queue):
         self.db = psycopg2.connect(
             host=config.db_address.split(':')[0],
             database=config.db_name,
@@ -17,12 +19,14 @@ class PredictHandler(object):
             port=config.db_address.split(':')[1]
         )
         self.queue = queue
+        register_log_queue(log_queue)
         self.make_prediction()
 
     def make_prediction(self):
         while True:
             request: MakePredictRequestEntity = self.queue.get(block=True)
 
+            logging.info(f'Make prediction: {request}')
             arima_model = pm.auto_arima(
                 [item.value for item in request.items],
                 start_p=1, start_q=1,
@@ -45,6 +49,7 @@ class PredictHandler(object):
                 information_criterion='bic',
                 out_of_sample_size=7
             )
+            logging.info(f'Make prediction: {request} finished training')
 
             x_pred, _ = arima_model.predict(
                 n_periods=request.predict_periods,
@@ -60,6 +65,8 @@ class PredictHandler(object):
                 predict_start=len(request.items),
                 items=[]
             )
+
+            logging.info(f'Make prediction: {request} saved')
 
     def save_prediction(
             self,
@@ -127,7 +134,7 @@ class PredictHandler(object):
 
 
 class GetHandler(object):
-    def __init__(self, config: argparse.Namespace):
+    def __init__(self, config: argparse.Namespace, log_queue: multiprocessing.Queue):
         self.db = psycopg2.connect(
             host=config.db_address.split(':')[0],
             database=config.db_name,
@@ -135,6 +142,7 @@ class GetHandler(object):
             password=config.db_password,
             port=config.db_address.split(':')[1]
         )
+        register_log_queue(log_queue)
 
     def get_prediction(self, username: str, name: str) -> (str, int, int, list[tuple[int, float]]):
         cursor = self.db.cursor()
