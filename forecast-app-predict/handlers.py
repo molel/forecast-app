@@ -144,25 +144,33 @@ class GetHandler(object):
             (username,)
         )
         if cursor.rowcount == 0:
-            print(f"no such user {username}")
             cursor.close()
-            return
+            raise Exception(f"no such user {username=}")
         user_id = cursor.fetchone()[0]
 
         cursor.execute(
             "SELECT id, unit_id, period, prediction_start FROM time_series WHERE name = %s AND user_id = %s;",
             (name, user_id)
         )
+        if cursor.rowcount == 0:
+            cursor.close()
+            raise Exception(f"no such time-series {name=}")
         series_id, unit_id, period, prediction_start = cursor.fetchone()
 
         cursor.execute(
             "SELECT name FROM measurement_units WHERE id = %s;",
             (unit_id,)
         )
+        if cursor.rowcount == 0:
+            cursor.close()
+            raise Exception(f"no such unit {unit_id}")
         unit = cursor.fetchone()[0]
 
         cursor.execute(
             "SELECT ts, value FROM records WHERE series_id = %s;",
             (series_id,)
         )
+        if cursor.rowcount == 0:
+            cursor.close()
+            raise Exception(f"no such time-series records {name=}")
         return unit, prediction_start, period, cursor.fetchall()
