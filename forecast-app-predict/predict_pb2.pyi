@@ -5,6 +5,10 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class Empty(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
 class TimeSeriesItem(_message.Message):
     __slots__ = ("ts", "value")
     TS_FIELD_NUMBER: _ClassVar[int]
@@ -14,24 +18,18 @@ class TimeSeriesItem(_message.Message):
     def __init__(self, ts: _Optional[int] = ..., value: _Optional[float] = ...) -> None: ...
 
 class MakePredictRequest(_message.Message):
-    __slots__ = ("username", "name", "unit", "period", "series")
+    __slots__ = ("username", "name", "unit", "period", "items")
     USERNAME_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     UNIT_FIELD_NUMBER: _ClassVar[int]
     PERIOD_FIELD_NUMBER: _ClassVar[int]
-    SERIES_FIELD_NUMBER: _ClassVar[int]
+    ITEMS_FIELD_NUMBER: _ClassVar[int]
     username: str
     name: str
     unit: str
     period: int
-    series: bytes
-    def __init__(self, username: _Optional[str] = ..., name: _Optional[str] = ..., unit: _Optional[str] = ..., period: _Optional[int] = ..., series: _Optional[bytes] = ...) -> None: ...
-
-class MakePredictResponse(_message.Message):
-    __slots__ = ("items",)
-    ITEMS_FIELD_NUMBER: _ClassVar[int]
     items: _containers.RepeatedCompositeFieldContainer[TimeSeriesItem]
-    def __init__(self, items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
+    def __init__(self, username: _Optional[str] = ..., name: _Optional[str] = ..., unit: _Optional[str] = ..., period: _Optional[int] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
 
 class GetPredictRequest(_message.Message):
     __slots__ = ("username", "name")

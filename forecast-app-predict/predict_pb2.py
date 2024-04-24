@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rpredict.proto\"+\n\x0eTimeSeriesItem\x12\n\n\x02ts\x18\x01 \x01(\x03\x12\r\n\x05value\x18\x02 \x01(\x01\"b\n\x12MakePredictRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04unit\x18\x03 \x01(\t\x12\x0e\n\x06period\x18\x04 \x01(\x05\x12\x0e\n\x06series\x18\x05 \x01(\x0c\"5\n\x13MakePredictResponse\x12\x1e\n\x05items\x18\x01 \x03(\x0b\x32\x0f.TimeSeriesItem\"3\n\x11GetPredictRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"U\n\x12GetPredictResponse\x12\x0c\n\x04unit\x18\x01 \x01(\t\x12\x11\n\tdelimiter\x18\x02 \x01(\x03\x12\x1e\n\x05items\x18\x03 \x03(\x0b\x32\x0f.TimeSeriesItem2\x81\x01\n\x0ePredictService\x12\x38\n\x0bMakePredict\x12\x13.MakePredictRequest\x1a\x14.MakePredictResponse\x12\x35\n\nGetPredict\x12\x12.GetPredictRequest\x1a\x13.GetPredictResponseB\x0cZ\ngo/predictb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rpredict.proto\"\x07\n\x05\x45mpty\"+\n\x0eTimeSeriesItem\x12\n\n\x02ts\x18\x01 \x01(\x03\x12\r\n\x05value\x18\x02 \x01(\x01\"r\n\x12MakePredictRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04unit\x18\x03 \x01(\t\x12\x0e\n\x06period\x18\x04 \x01(\x05\x12\x1e\n\x05items\x18\x05 \x03(\x0b\x32\x0f.TimeSeriesItem\"3\n\x11GetPredictRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"U\n\x12GetPredictResponse\x12\x0c\n\x04unit\x18\x01 \x01(\t\x12\x11\n\tdelimiter\x18\x02 \x01(\x03\x12\x1e\n\x05items\x18\x03 \x03(\x0b\x32\x0f.TimeSeriesItem2s\n\x0ePredictService\x12*\n\x0bMakePredict\x12\x13.MakePredictRequest\x1a\x06.Empty\x12\x35\n\nGetPredict\x12\x12.GetPredictRequest\x1a\x13.GetPredictResponseB\x0cZ\ngo/predictb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,16 +22,16 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'predict_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z\ngo/predict'
-  _globals['_TIMESERIESITEM']._serialized_start=17
-  _globals['_TIMESERIESITEM']._serialized_end=60
-  _globals['_MAKEPREDICTREQUEST']._serialized_start=62
-  _globals['_MAKEPREDICTREQUEST']._serialized_end=160
-  _globals['_MAKEPREDICTRESPONSE']._serialized_start=162
-  _globals['_MAKEPREDICTRESPONSE']._serialized_end=215
-  _globals['_GETPREDICTREQUEST']._serialized_start=217
-  _globals['_GETPREDICTREQUEST']._serialized_end=268
-  _globals['_GETPREDICTRESPONSE']._serialized_start=270
-  _globals['_GETPREDICTRESPONSE']._serialized_end=355
-  _globals['_PREDICTSERVICE']._serialized_start=358
-  _globals['_PREDICTSERVICE']._serialized_end=487
+  _globals['_EMPTY']._serialized_start=17
+  _globals['_EMPTY']._serialized_end=24
+  _globals['_TIMESERIESITEM']._serialized_start=26
+  _globals['_TIMESERIESITEM']._serialized_end=69
+  _globals['_MAKEPREDICTREQUEST']._serialized_start=71
+  _globals['_MAKEPREDICTREQUEST']._serialized_end=185
+  _globals['_GETPREDICTREQUEST']._serialized_start=187
+  _globals['_GETPREDICTREQUEST']._serialized_end=238
+  _globals['_GETPREDICTRESPONSE']._serialized_start=240
+  _globals['_GETPREDICTRESPONSE']._serialized_end=325
+  _globals['_PREDICTSERVICE']._serialized_start=327
+  _globals['_PREDICTSERVICE']._serialized_end=442
 # @@protoc_insertion_point(module_scope)

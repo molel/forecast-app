@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PredictServiceClient interface {
-	MakePredict(ctx context.Context, in *MakePredictRequest, opts ...grpc.CallOption) (*MakePredictResponse, error)
+	MakePredict(ctx context.Context, in *MakePredictRequest, opts ...grpc.CallOption) (*Empty, error)
 	GetPredict(ctx context.Context, in *GetPredictRequest, opts ...grpc.CallOption) (*GetPredictResponse, error)
 }
 
@@ -39,8 +39,8 @@ func NewPredictServiceClient(cc grpc.ClientConnInterface) PredictServiceClient {
 	return &predictServiceClient{cc}
 }
 
-func (c *predictServiceClient) MakePredict(ctx context.Context, in *MakePredictRequest, opts ...grpc.CallOption) (*MakePredictResponse, error) {
-	out := new(MakePredictResponse)
+func (c *predictServiceClient) MakePredict(ctx context.Context, in *MakePredictRequest, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, PredictService_MakePredict_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (c *predictServiceClient) GetPredict(ctx context.Context, in *GetPredictReq
 // All implementations must embed UnimplementedPredictServiceServer
 // for forward compatibility
 type PredictServiceServer interface {
-	MakePredict(context.Context, *MakePredictRequest) (*MakePredictResponse, error)
+	MakePredict(context.Context, *MakePredictRequest) (*Empty, error)
 	GetPredict(context.Context, *GetPredictRequest) (*GetPredictResponse, error)
 	mustEmbedUnimplementedPredictServiceServer()
 }
@@ -70,7 +70,7 @@ type PredictServiceServer interface {
 type UnimplementedPredictServiceServer struct {
 }
 
-func (UnimplementedPredictServiceServer) MakePredict(context.Context, *MakePredictRequest) (*MakePredictResponse, error) {
+func (UnimplementedPredictServiceServer) MakePredict(context.Context, *MakePredictRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MakePredict not implemented")
 }
 func (UnimplementedPredictServiceServer) GetPredict(context.Context, *GetPredictRequest) (*GetPredictResponse, error) {

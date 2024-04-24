@@ -17,7 +17,7 @@ class PredictServiceStub(object):
         self.MakePredict = channel.unary_unary(
                 '/PredictService/MakePredict',
                 request_serializer=predict__pb2.MakePredictRequest.SerializeToString,
-                response_deserializer=predict__pb2.MakePredictResponse.FromString,
+                response_deserializer=predict__pb2.Empty.FromString,
                 )
         self.GetPredict = channel.unary_unary(
                 '/PredictService/GetPredict',
@@ -47,7 +47,7 @@ def add_PredictServiceServicer_to_server(servicer, server):
             'MakePredict': grpc.unary_unary_rpc_method_handler(
                     servicer.MakePredict,
                     request_deserializer=predict__pb2.MakePredictRequest.FromString,
-                    response_serializer=predict__pb2.MakePredictResponse.SerializeToString,
+                    response_serializer=predict__pb2.Empty.SerializeToString,
             ),
             'GetPredict': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPredict,
@@ -77,7 +77,7 @@ class PredictService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/PredictService/MakePredict',
             predict__pb2.MakePredictRequest.SerializeToString,
-            predict__pb2.MakePredictResponse.FromString,
+            predict__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

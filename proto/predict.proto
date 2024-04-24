@@ -3,9 +3,11 @@ syntax = "proto3";
 option go_package = "go/predict";
 
 service PredictService {
-  rpc MakePredict (MakePredictRequest) returns (MakePredictResponse);
+  rpc MakePredict (MakePredictRequest) returns (Empty);
   rpc GetPredict (GetPredictRequest) returns (GetPredictResponse);
 }
+
+message Empty{}
 
 message TimeSeriesItem {
   int64 ts = 1;
@@ -17,11 +19,7 @@ message MakePredictRequest {
   string name = 2;
   string unit = 3;
   int32 period = 4;
-  bytes series = 5;
-}
-
-message MakePredictResponse {
-  repeated TimeSeriesItem items = 1;
+  repeated TimeSeriesItem items = 5;
 }
 
 message GetPredictRequest {
