@@ -52,7 +52,7 @@ func (r *Repository) Init(databaseUser, databasePassword, databaseAddress, datab
 	if ifUserExistsQuery, err = r.conn.Preparex("SELECT EXISTS(SELECT 1 FROM users WHERE username=$1);"); err != nil {
 		return fmt.Errorf("cannot prepare ifUserExists query: %s", err)
 	}
-	if insertUserQuery, err = r.conn.Preparex("INSERT INTO users VALUES ($1, $2);"); err != nil {
+	if insertUserQuery, err = r.conn.Preparex("INSERT INTO users (username, password) VALUES ($1, $2);"); err != nil {
 		return fmt.Errorf("cannot prepare ifUserExists query: %s", err)
 	}
 	if getUserPasswordQuery, err = r.conn.Preparex("SELECT password FROM users WHERE username=$1;"); err != nil {
