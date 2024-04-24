@@ -52,3 +52,15 @@ class GetPredictResponse(_message.Message):
     period: int
     items: _containers.RepeatedCompositeFieldContainer[TimeSeriesItem]
     def __init__(self, unit: _Optional[str] = ..., delimiter: _Optional[int] = ..., period: _Optional[int] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
+
+class GetPredictsRequest(_message.Message):
+    __slots__ = ("username",)
+    USERNAME_FIELD_NUMBER: _ClassVar[int]
+    username: str
+    def __init__(self, username: _Optional[str] = ...) -> None: ...
+
+class GetPredictsResponse(_message.Message):
+    __slots__ = ("names",)
+    NAMES_FIELD_NUMBER: _ClassVar[int]
+    names: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, names: _Optional[_Iterable[str]] = ...) -> None: ...

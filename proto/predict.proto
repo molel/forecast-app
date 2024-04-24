@@ -5,6 +5,7 @@ option go_package = "go/predict";
 service PredictService {
   rpc MakePredict (MakePredictRequest) returns (Empty);
   rpc GetPredict (GetPredictRequest) returns (GetPredictResponse);
+  rpc GetPredicts (GetPredictsRequest) returns (GetPredictsResponse);
 }
 
 message Empty{}
@@ -33,4 +34,12 @@ message GetPredictResponse {
   int64 delimiter = 2;
   int32 period = 3;
   repeated TimeSeriesItem items = 4;
+}
+
+message GetPredictsRequest {
+  string username = 1;
+}
+
+message GetPredictsResponse {
+  repeated string names = 1;
 }

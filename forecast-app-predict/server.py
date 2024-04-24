@@ -27,11 +27,19 @@ class PredictServer(predict_pb2_grpc.PredictServiceServicer):
         unit, delimiter, period, items = self.db.get_prediction(request.username, request.name)
         items = [predict_pb2.TimeSeriesItem(ts=ts, value=value) for ts, value in items]
         return predict_pb2.GetPredictResponse(
-            unit='шт',
+            unit=unit,
             delimiter=delimiter,
             period=period,
             items=items
         )
+
+    async def GetPredicts(
+            self,
+            request: predict_pb2.GetPredictRequest,
+            context: grpc.aio.ServicerContext
+    ) -> predict_pb2.GetPredictsResponse:
+        names = self.db.get_predictions(request.username)
+        return predict_pb2.GetPredictsResponse(names=names)
 
     async def MakePredict(
             self,

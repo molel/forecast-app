@@ -24,6 +24,11 @@ class PredictServiceStub(object):
                 request_serializer=predict__pb2.GetPredictRequest.SerializeToString,
                 response_deserializer=predict__pb2.GetPredictResponse.FromString,
                 )
+        self.GetPredicts = channel.unary_unary(
+                '/PredictService/GetPredicts',
+                request_serializer=predict__pb2.GetPredictsRequest.SerializeToString,
+                response_deserializer=predict__pb2.GetPredictsResponse.FromString,
+                )
 
 
 class PredictServiceServicer(object):
@@ -41,6 +46,12 @@ class PredictServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetPredicts(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_PredictServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_PredictServiceServicer_to_server(servicer, server):
                     servicer.GetPredict,
                     request_deserializer=predict__pb2.GetPredictRequest.FromString,
                     response_serializer=predict__pb2.GetPredictResponse.SerializeToString,
+            ),
+            'GetPredicts': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetPredicts,
+                    request_deserializer=predict__pb2.GetPredictsRequest.FromString,
+                    response_serializer=predict__pb2.GetPredictsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class PredictService(object):
         return grpc.experimental.unary_unary(request, target, '/PredictService/GetPredict',
             predict__pb2.GetPredictRequest.SerializeToString,
             predict__pb2.GetPredictResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetPredicts(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/PredictService/GetPredicts',
+            predict__pb2.GetPredictsRequest.SerializeToString,
+            predict__pb2.GetPredictsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

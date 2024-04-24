@@ -174,3 +174,26 @@ class GetHandler(object):
             cursor.close()
             raise Exception(f"no such time-series records {name=}")
         return unit, prediction_start, period, cursor.fetchall()
+
+    def get_predictions(self, username: str) -> (list[str]):
+        cursor = self.db.cursor()
+
+        cursor.execute(
+            "SELECT id FROM users WHERE username = %s;",
+            (username,)
+        )
+        if cursor.rowcount == 0:
+            cursor.close()
+            raise Exception(f"no such user {username=}")
+        user_id = cursor.fetchone()[0]
+
+        cursor.execute(
+            "SELECT name FROM time_series WHERE user_id = %s;",
+            (user_id,)
+        )
+        if cursor.rowcount == 0:
+            cursor.close()
+            raise Exception(f"no such time-series {username=}")
+        names = [row[0] for row in cursor.fetchall()]
+
+        return names

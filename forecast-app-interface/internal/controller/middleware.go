@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -19,6 +20,20 @@ func AuthMiddleware(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 		if err := verifyToken(tokenString); err != nil {
 			ctx.Redirect("/", fasthttp.StatusSeeOther)
 			return
+		}
+
+		next(ctx)
+	}
+}
+
+func GetUserPredictionsMiddleware(next fasthttp.RequestHandler, r *Router) fasthttp.RequestHandler {
+	return func(ctx *fasthttp.RequestCtx) {
+		username := string(ctx.Request.Header.Cookie("username"))
+		userPredictsNames, err := r.useCase.GetForecasts(username)
+		if err != nil {
+			log.Println("cannot get user predicts")
+		} else {
+			ctx.SetUserValue("user_predicts_names", userPredictsNames)
 		}
 
 		next(ctx)

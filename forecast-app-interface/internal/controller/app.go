@@ -22,13 +22,14 @@ var (
 )
 
 type appTemplateData struct {
-	Username  string
-	Name      string
-	Unit      string
-	Delimiter int64
-	Period    int32
-	Error     string
-	Items     []*predict.TimeSeriesItem
+	Username         string
+	Name             string
+	Unit             string
+	Delimiter        int64
+	Period           int32
+	Error            string
+	UserPredictNames []string
+	Items            []*predict.TimeSeriesItem
 }
 
 func (r *Router) HandleRoot(ctx *fasthttp.RequestCtx) {
@@ -70,7 +71,8 @@ func (r *Router) HandleApp(ctx *fasthttp.RequestCtx) {
 	username := string(ctx.Request.Header.Cookie("username"))
 
 	templateData := appTemplateData{
-		Username: username,
+		Username:         username,
+		UserPredictNames: ctx.UserValue("user_predicts_names").([]string),
 	}
 
 	if err := templates.ExecuteTemplate(ctx, "app.gohtml", templateData); err != nil {
@@ -91,7 +93,8 @@ func (r *Router) HandleGetPredict(ctx *fasthttp.RequestCtx) {
 	username := string(ctx.Request.Header.Cookie("username"))
 
 	templateData := appTemplateData{
-		Username: username,
+		Username:         username,
+		UserPredictNames: ctx.UserValue("user_predicts_names").([]string),
 	}
 
 	name := string(ctx.FormValue("name"))
@@ -126,6 +129,7 @@ func (r *Router) HandleMakePredict(ctx *fasthttp.RequestCtx) {
 	)
 
 	templateData.Username = string(ctx.Request.Header.Cookie("username"))
+	templateData.UserPredictNames = ctx.UserValue("user_predicts_names").([]string)
 
 	fileHeader, err := ctx.FormFile("time_series_file")
 	if err != nil {

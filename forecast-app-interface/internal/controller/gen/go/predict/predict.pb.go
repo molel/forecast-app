@@ -326,6 +326,100 @@ func (x *GetPredictResponse) GetItems() []*TimeSeriesItem {
 	return nil
 }
 
+type GetPredictsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+}
+
+func (x *GetPredictsRequest) Reset() {
+	*x = GetPredictsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_predict_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPredictsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPredictsRequest) ProtoMessage() {}
+
+func (x *GetPredictsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_predict_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPredictsRequest.ProtoReflect.Descriptor instead.
+func (*GetPredictsRequest) Descriptor() ([]byte, []int) {
+	return file_predict_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetPredictsRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+type GetPredictsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Names []string `protobuf:"bytes,1,rep,name=names,proto3" json:"names,omitempty"`
+}
+
+func (x *GetPredictsResponse) Reset() {
+	*x = GetPredictsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_predict_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPredictsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPredictsResponse) ProtoMessage() {}
+
+func (x *GetPredictsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_predict_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPredictsResponse.ProtoReflect.Descriptor instead.
+func (*GetPredictsResponse) Descriptor() ([]byte, []int) {
+	return file_predict_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetPredictsResponse) GetNames() []string {
+	if x != nil {
+		return x.Names
+	}
+	return nil
+}
+
 var File_predict_proto protoreflect.FileDescriptor
 
 var file_predict_proto_rawDesc = []byte{
@@ -359,15 +453,25 @@ var file_predict_proto_rawDesc = []byte{
 	0x05, 0x52, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x25, 0x0a, 0x05, 0x69, 0x74, 0x65,
 	0x6d, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x53,
 	0x65, 0x72, 0x69, 0x65, 0x73, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73,
-	0x32, 0x73, 0x0a, 0x0e, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x22, 0x30, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x22, 0x2b, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x6e, 0x61, 0x6d,
+	0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x32,
+	0xad, 0x01, 0x0a, 0x0e, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69,
 	0x63, 0x65, 0x12, 0x2a, 0x0a, 0x0b, 0x4d, 0x61, 0x6b, 0x65, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63,
 	0x74, 0x12, 0x13, 0x2e, 0x4d, 0x61, 0x6b, 0x65, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x06, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x12, 0x35,
 	0x0a, 0x0a, 0x47, 0x65, 0x74, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x12, 0x12, 0x2e, 0x47,
 	0x65, 0x74, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x1a, 0x13, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0c, 0x5a, 0x0a, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x65, 0x64,
-	0x69, 0x63, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x50, 0x72, 0x65, 0x64,
+	0x69, 0x63, 0x74, 0x73, 0x12, 0x13, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x65, 0x64, 0x69, 0x63,
+	0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x47, 0x65, 0x74, 0x50,
+	0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
+	0x0c, 0x5a, 0x0a, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x65, 0x64, 0x69, 0x63, 0x74, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -382,23 +486,27 @@ func file_predict_proto_rawDescGZIP() []byte {
 	return file_predict_proto_rawDescData
 }
 
-var file_predict_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_predict_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_predict_proto_goTypes = []interface{}{
-	(*Empty)(nil),              // 0: Empty
-	(*TimeSeriesItem)(nil),     // 1: TimeSeriesItem
-	(*MakePredictRequest)(nil), // 2: MakePredictRequest
-	(*GetPredictRequest)(nil),  // 3: GetPredictRequest
-	(*GetPredictResponse)(nil), // 4: GetPredictResponse
+	(*Empty)(nil),               // 0: Empty
+	(*TimeSeriesItem)(nil),      // 1: TimeSeriesItem
+	(*MakePredictRequest)(nil),  // 2: MakePredictRequest
+	(*GetPredictRequest)(nil),   // 3: GetPredictRequest
+	(*GetPredictResponse)(nil),  // 4: GetPredictResponse
+	(*GetPredictsRequest)(nil),  // 5: GetPredictsRequest
+	(*GetPredictsResponse)(nil), // 6: GetPredictsResponse
 }
 var file_predict_proto_depIdxs = []int32{
 	1, // 0: MakePredictRequest.items:type_name -> TimeSeriesItem
 	1, // 1: GetPredictResponse.items:type_name -> TimeSeriesItem
 	2, // 2: PredictService.MakePredict:input_type -> MakePredictRequest
 	3, // 3: PredictService.GetPredict:input_type -> GetPredictRequest
-	0, // 4: PredictService.MakePredict:output_type -> Empty
-	4, // 5: PredictService.GetPredict:output_type -> GetPredictResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
+	5, // 4: PredictService.GetPredicts:input_type -> GetPredictsRequest
+	0, // 5: PredictService.MakePredict:output_type -> Empty
+	4, // 6: PredictService.GetPredict:output_type -> GetPredictResponse
+	6, // 7: PredictService.GetPredicts:output_type -> GetPredictsResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -470,6 +578,30 @@ func file_predict_proto_init() {
 				return nil
 			}
 		}
+		file_predict_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPredictsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_predict_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPredictsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -477,7 +609,7 @@ func file_predict_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_predict_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

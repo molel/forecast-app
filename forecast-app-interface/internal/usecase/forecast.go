@@ -12,6 +12,7 @@ import (
 
 const (
 	getForecastErrorTemplate  = "cannot get forecast [name=%s]: %s"
+	getForecastsErrorTemplate = "cannot get forecasts: %s"
 	makeForecastErrorTemplate = "cannot get forecast [name=%s unit=%s period=%d]: %s"
 )
 
@@ -38,6 +39,30 @@ func (u *UseCase) GetForecast(username, name string) (string, int64, int32, any,
 	}
 
 	return response.Unit, response.Delimiter, response.Period, response.Items, err
+}
+
+var getPredictsRequestPool = sync.Pool{
+	New: func() any {
+		return &predict.GetPredictsRequest{}
+	},
+}
+
+func (u *UseCase) GetForecasts(username string) ([]string, error) {
+	request := getPredictsRequestPool.Get().(*predict.GetPredictsRequest)
+	request.Username = username
+
+	response, err := u.predictClient.GetPredicts(context.Background(), request)
+	if err != nil {
+		err = fmt.Errorf(getForecastsErrorTemplate, status.Convert(err).Message())
+	}
+
+	getPredictsRequestPool.Put(request)
+
+	if response == nil {
+		return nil, err
+	}
+
+	return response.Names, err
 }
 
 var makePredictRequestPool = sync.Pool{
@@ -77,7 +102,7 @@ func (u *UseCase) MakeForecast(username, name, unit string, period, predictPerio
 	for i := range request.Items {
 		timeSeriesItemPool.Put(request.Items[i])
 	}
-	getPredictRequestPool.Put(request)
+	makePredictRequestPool.Put(request)
 
 	return err
 }
