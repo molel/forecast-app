@@ -13,6 +13,11 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../static/favicon/site.webmanifest">
 </head>
 <body>
 <header class="navbar navbar-expand-lg navbar-light bg-primary px-2">
@@ -36,23 +41,43 @@
         <form class="col" id="searchForm" action="/app/get">
             <div class="row">
                 <div class="col">
-                    <input class="form-control" id="forecastSearchInput" type="text" placeholder="Поиск" name="name">
+                    <input class="form-control" type="text" placeholder="Поиск" name="name">
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary" id="forecastSearchButton" type="submit" onclick="">Поиск</button>
+                    <button class="btn btn-primary" type="submit">Поиск</button>
                 </div>
             </div>
         </form>
-        <form class="col-auto" id="searchForm" action="./app">
-            <div class="col-auto">
-                <input class="form-control" type="file">
+        <form class="col-auto" id="loadForm" action="/app/predict" method="post" enctype="multipart/form-data">
+            <div class="col-auto mb-2">
+                <input class="form-control" type="file" name="time_series_file" accept="text/csv">
+            </div>
+            <div class="col-auto mb-2">
+                <select class="form-select" name="period">
+                    <option value="24">Ежечасно</option>
+                    <option value="7">Ежедневно</option>
+                    <option value="4">Еженедельно</option>
+                    <option value="12">Ежемесячно</option>
+                </select>
+            </div>
+            <div class="col-auto  mb-2">
+                <input class="form-control" type="text" placeholder="Ед. изм." name="unit">
+            </div>
+            <div class="col-auto  mb-2">
+                <button class="btn btn-secondary" type="submit">Отправить</button>
             </div>
         </form>
     </div>
 </div>
 
+{{if .Error}}
+    <div class="col">
+        <p class="text-danger">{{.Error}}</p>
+    </div>
+{{end}}
+
 <div id="chart-container"></div>
-{{if .Unit}}
+{{if and (and .Unit .Name) (not .Error)}}
     <script type="text/javascript">
         Highcharts.chart('chart-container', {
             chart: {
