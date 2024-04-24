@@ -26,14 +26,26 @@
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Username
+                {{.Username}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
+                {{range .UserPredictNames}}
+                    <div class="dropdown-item" onclick="">{{.}}</div>
+                {{end}}
             </div>
         </div>
     </div>
 </header>
+<script>
+    var dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            let input = document.getElementById("predict_name_input")
+            input.value = event.target.innerHTML
+            document.getElementById("searchForm").submit()
+        });
+    });
+</script>
 
 
 <div class="container my-2">
@@ -41,7 +53,7 @@
         <form class="col" id="searchForm" action="/app/get">
             <div class="row">
                 <div class="col">
-                    <input class="form-control" type="text" placeholder="Поиск" name="name">
+                    <input class="form-control" type="text" placeholder="Поиск" name="name" id="predict_name_input">
                 </div>
                 <div class="col-auto">
                     <button class="btn btn-primary" type="submit">Поиск</button>
@@ -65,7 +77,7 @@
                     <input class="form-control" type="text" placeholder="Ед. изм." name="unit">
                 </div>
                 <div class="col-auto">
-                    <input class="form-control" type="number" placeholder="Дни" name="predict_periods">
+                    <input class="form-control" type="number" placeholder="Периоды" name="predict_periods" min="0">
                 </div>
             </div>
             <div class="col-auto">
@@ -115,6 +127,9 @@
             plotOptions: {
                 line: {
                     enableMouseTracking: true
+                },
+                series: {
+                    color: 'orange'
                 }
             },
             series: [{
@@ -127,12 +142,8 @@
                 ],
                 zones: [
                     {
-                        value: 0,
-                        color: 'blue'
-                    },
-                    {
                         value:  {{.Delimiter}},
-                        color: 'orange'
+                        color: '#2caffe'
                     }
                 ]
             }]
