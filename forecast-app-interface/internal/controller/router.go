@@ -15,7 +15,7 @@ type AuthUseCase interface {
 }
 
 type ForecastUseCase interface {
-	MakeForecast(username, name, unit string, period int32, tss []int64, values []float64) error
+	MakeForecast(username, name, unit string, period, predictPeriods int32, tss []int64, values []float64) error
 	GetForecast(username, name string) (string, int64, any, error)
 }
 

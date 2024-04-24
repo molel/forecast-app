@@ -34,6 +34,14 @@ def parse_config() -> argparse.Namespace:
         help='database address',
         dest='db_address'
     )
+    cmd_arg_parser.add_argument(
+        '--pool',
+        action='store',
+        type=int,
+        required=True,
+        help='number of processes for predict handler pool',
+        dest='pool'
+    )
 
     DB_USER_KEY = 'DB_USER'
     DB_PASSWORD_KEY = 'DB_PASSWORD'

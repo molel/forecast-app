@@ -52,18 +52,23 @@
             <div class="col-auto mb-2">
                 <input class="form-control" type="file" name="time_series_file" accept="text/csv">
             </div>
-            <div class="col-auto mb-2">
-                <select class="form-select" name="period">
-                    <option value="24">Ежечасно</option>
-                    <option value="7">Ежедневно</option>
-                    <option value="4">Еженедельно</option>
-                    <option value="12">Ежемесячно</option>
-                </select>
+            <div class="row mb-2">
+                <div class="col-auto">
+                    <select class="form-select" name="period">
+                        <option value="24">Ежечасно</option>
+                        <option value="7">Ежедневно</option>
+                        <option value="4">Еженедельно</option>
+                        <option value="12">Ежемесячно</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" type="text" placeholder="Ед. изм." name="unit">
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" type="number" placeholder="Дни" name="predict_periods">
+                </div>
             </div>
-            <div class="col-auto  mb-2">
-                <input class="form-control" type="text" placeholder="Ед. изм." name="unit">
-            </div>
-            <div class="col-auto  mb-2">
+            <div class="col-auto">
                 <button class="btn btn-secondary" type="submit">Отправить</button>
             </div>
         </form>

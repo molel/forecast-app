@@ -3,14 +3,15 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/status"
 	"sync"
 
 	"forecast-app-interface/internal/controller/gen/go/auth"
 )
 
 const (
-	registerErrorTemplate = "cannot register user: %w"
-	loginErrorTemplate    = "cannot login user: %w"
+	registerErrorTemplate = "cannot register user: %s"
+	loginErrorTemplate    = "cannot login user: %s"
 )
 
 var registerRequestsPool = sync.Pool{
@@ -32,7 +33,7 @@ func (u *UseCase) Register(username, password string) error {
 
 	_, err := u.authClient.Register(context.Background(), request)
 	if err != nil {
-		err = fmt.Errorf(registerErrorTemplate, err)
+		err = fmt.Errorf(registerErrorTemplate, status.Convert(err).Message())
 	}
 
 	registerRequestsPool.Put(request)
@@ -47,7 +48,7 @@ func (u *UseCase) Login(username, password string) error {
 
 	_, err := u.authClient.Login(context.Background(), request)
 	if err != nil {
-		err = fmt.Errorf(loginErrorTemplate, err)
+		err = fmt.Errorf(loginErrorTemplate, status.Convert(err).Message())
 	}
 
 	loginRequestsPool.Put(request)

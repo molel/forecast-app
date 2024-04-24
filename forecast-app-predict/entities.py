@@ -7,4 +7,5 @@ class MakePredictRequestEntity(object):
         self.username = request.username
         self.unit = request.unit
         self.period = request.period
+        self.predict_periods = request.predict_periods
         self.items = list(request.items)

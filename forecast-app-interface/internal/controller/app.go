@@ -150,6 +150,7 @@ func (r *Router) HandleMakePredict(ctx *fasthttp.RequestCtx) {
 	username := string(ctx.Request.Header.Cookie("username"))
 	period, _ := strconv.ParseInt(string(ctx.FormValue("period")), 10, 32)
 	unit := string(ctx.FormValue("unit"))
+	predictPeriods, _ := strconv.ParseInt(string(ctx.FormValue("predict_periods")), 10, 32)
 	name := fileHeader.Filename
 	tss := make([]int64, len(records))
 	values := make([]float64, len(records))
@@ -170,7 +171,7 @@ func (r *Router) HandleMakePredict(ctx *fasthttp.RequestCtx) {
 		}
 	}
 
-	if err = r.useCase.MakeForecast(username, name, unit, int32(period), tss, values); err != nil {
+	if err = r.useCase.MakeForecast(username, name, unit, int32(period), int32(predictPeriods), tss, values); err != nil {
 		templateData.Error = err.Error()
 		ProcessTemplate(ctx, fasthttp.StatusInternalServerError, "app.gohtml", templateData)
 		return

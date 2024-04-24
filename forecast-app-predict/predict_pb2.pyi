@@ -18,18 +18,20 @@ class TimeSeriesItem(_message.Message):
     def __init__(self, ts: _Optional[int] = ..., value: _Optional[float] = ...) -> None: ...
 
 class MakePredictRequest(_message.Message):
-    __slots__ = ("username", "name", "unit", "period", "items")
+    __slots__ = ("username", "name", "unit", "period", "predict_periods", "items")
     USERNAME_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     UNIT_FIELD_NUMBER: _ClassVar[int]
     PERIOD_FIELD_NUMBER: _ClassVar[int]
+    PREDICT_PERIODS_FIELD_NUMBER: _ClassVar[int]
     ITEMS_FIELD_NUMBER: _ClassVar[int]
     username: str
     name: str
     unit: str
     period: int
+    predict_periods: int
     items: _containers.RepeatedCompositeFieldContainer[TimeSeriesItem]
-    def __init__(self, username: _Optional[str] = ..., name: _Optional[str] = ..., unit: _Optional[str] = ..., period: _Optional[int] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
+    def __init__(self, username: _Optional[str] = ..., name: _Optional[str] = ..., unit: _Optional[str] = ..., period: _Optional[int] = ..., predict_periods: _Optional[int] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
 
 class GetPredictRequest(_message.Message):
     __slots__ = ("username", "name")
@@ -40,11 +42,13 @@ class GetPredictRequest(_message.Message):
     def __init__(self, username: _Optional[str] = ..., name: _Optional[str] = ...) -> None: ...
 
 class GetPredictResponse(_message.Message):
-    __slots__ = ("unit", "delimiter", "items")
+    __slots__ = ("unit", "delimiter", "period", "items")
     UNIT_FIELD_NUMBER: _ClassVar[int]
     DELIMITER_FIELD_NUMBER: _ClassVar[int]
+    PERIOD_FIELD_NUMBER: _ClassVar[int]
     ITEMS_FIELD_NUMBER: _ClassVar[int]
     unit: str
     delimiter: int
+    period: int
     items: _containers.RepeatedCompositeFieldContainer[TimeSeriesItem]
-    def __init__(self, unit: _Optional[str] = ..., delimiter: _Optional[int] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...
+    def __init__(self, unit: _Optional[str] = ..., delimiter: _Optional[int] = ..., period: _Optional[int] = ..., items: _Optional[_Iterable[_Union[TimeSeriesItem, _Mapping]]] = ...) -> None: ...

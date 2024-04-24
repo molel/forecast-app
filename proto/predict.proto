@@ -19,7 +19,8 @@ message MakePredictRequest {
   string name = 2;
   string unit = 3;
   int32 period = 4;
-  repeated TimeSeriesItem items = 5;
+  int32 predict_periods = 5;
+  repeated TimeSeriesItem items = 6;
 }
 
 message GetPredictRequest {
@@ -30,5 +31,6 @@ message GetPredictRequest {
 message GetPredictResponse {
   string unit = 1;
   int64 delimiter = 2;
-  repeated TimeSeriesItem items = 3;
+  int32 period = 3;
+  repeated TimeSeriesItem items = 4;
 }
