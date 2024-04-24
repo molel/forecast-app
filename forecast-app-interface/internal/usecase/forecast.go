@@ -21,7 +21,7 @@ var getPredictRequestPool = sync.Pool{
 	},
 }
 
-func (u *UseCase) GetForecast(username, name string) (string, int64, any, error) {
+func (u *UseCase) GetForecast(username, name string) (string, int64, int32, any, error) {
 	request := getPredictRequestPool.Get().(*predict.GetPredictRequest)
 	request.Username = username
 	request.Name = name
@@ -34,10 +34,10 @@ func (u *UseCase) GetForecast(username, name string) (string, int64, any, error)
 	getPredictRequestPool.Put(request)
 
 	if response == nil {
-		return "", 0, nil, err
+		return "", 0, 0, nil, err
 	}
 
-	return response.Unit, response.Delimiter, response.Items, err
+	return response.Unit, response.Delimiter, response.Period, response.Items, err
 }
 
 var makePredictRequestPool = sync.Pool{

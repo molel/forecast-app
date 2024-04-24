@@ -103,7 +103,7 @@
                 },
                 categories: [
                     {{- range .Items -}}
-                    {{- formatTs .Ts -}},
+                    {{- formatTs .Ts $.Period -}},
                     {{- end}}
                 ]
             },

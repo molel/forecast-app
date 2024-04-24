@@ -26,6 +26,7 @@ type appTemplateData struct {
 	Name      string
 	Unit      string
 	Delimiter int64
+	Period    int32
 	Error     string
 	Items     []*predict.TimeSeriesItem
 }
@@ -95,7 +96,7 @@ func (r *Router) HandleGetPredict(ctx *fasthttp.RequestCtx) {
 
 	name := string(ctx.FormValue("name"))
 	if len(name) > 0 {
-		unit, predictStart, items, err := r.useCase.GetForecast(username, name)
+		unit, predictStart, period, items, err := r.useCase.GetForecast(username, name)
 		if err != nil {
 			templateData.Error = err.Error()
 			ProcessTemplate(ctx, fasthttp.StatusInternalServerError, "app.gohtml", templateData)
@@ -104,6 +105,7 @@ func (r *Router) HandleGetPredict(ctx *fasthttp.RequestCtx) {
 			templateData.Name = name
 			templateData.Unit = unit
 			templateData.Delimiter = predictStart
+			templateData.Period = period
 			templateData.Items = items.([]*predict.TimeSeriesItem)
 		}
 	}
