@@ -15,7 +15,7 @@ type AuthUseCase interface {
 }
 
 type ForecastUseCase interface {
-	MakeForecast(username, name, unit string, period int32, series []byte) (any, error)
+	MakeForecast(username, name, unit string, period int32, tss []int64, values []float64) error
 	GetForecast(username, name string) (string, int64, any, error)
 }
 
@@ -34,6 +34,8 @@ func (r *Router) Handle(ctx *fasthttp.RequestCtx) {
 	// static
 	case "/":
 		r.HandleRoot(ctx)
+	case "/favicon.ico":
+		r.HandleFavicon(ctx)
 
 	// auth
 	case "/register":
@@ -47,7 +49,7 @@ func (r *Router) Handle(ctx *fasthttp.RequestCtx) {
 	case "/app/get":
 		AuthMiddleware(r.HandleGetPredict)(ctx)
 	case "/app/predict":
-		AuthMiddleware(r.HandleGetPredict)(ctx)
+		AuthMiddleware(r.HandleMakePredict)(ctx)
 
 	default:
 		ctx.Redirect("/app", fasthttp.StatusSeeOther)
