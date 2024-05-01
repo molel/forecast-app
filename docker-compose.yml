@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  db:
-    image: postgres:latest
+  service_name:
+    image: postgres:16.2-alpine
     container_name: db
     restart: on-failure
     ports:
@@ -28,6 +28,23 @@ services:
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
 
+  predict:
+    build:
+      context: ./forecast-app-predict
+    container_name: predict
+    restart: on-failure
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    environment:
+      - HTTP=8080
+      - DATABASE_ADDRESS=db:5432
+      - DATABASE_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+
+
   interface:
     build:
       context: ./forecast-app-interface
@@ -37,6 +54,7 @@ services:
       - "8080:8080"
     depends_on:
       - auth
+      - predict
     environment:
       - HTTP=8080
       - AUTH-SERVICE-ADDRESS=auth:8081

@@ -17,8 +17,8 @@ class EnvDefault(argparse.Action):
 
 
 def parse_config() -> argparse.Namespace:
-    cmd_arg_parser = argparse.ArgumentParser()
-    cmd_arg_parser.add_argument(
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
         '--http',
         action='store',
         default=8080,
@@ -26,7 +26,7 @@ def parse_config() -> argparse.Namespace:
         required=True,
         help='http server port',
     )
-    cmd_arg_parser.add_argument(
+    arg_parser.add_argument(
         '--database-address',
         action='store',
         type=str,
@@ -34,7 +34,7 @@ def parse_config() -> argparse.Namespace:
         help='database address',
         dest='db_address'
     )
-    cmd_arg_parser.add_argument(
+    arg_parser.add_argument(
         '--pool',
         action='store',
         type=int,
@@ -47,7 +47,7 @@ def parse_config() -> argparse.Namespace:
     DB_PASSWORD_KEY = 'DB_PASSWORD'
     DB_NAME_KEY = 'DB_NAME'
 
-    cmd_arg_parser.add_argument(
+    arg_parser.add_argument(
         '--' + DB_USER_KEY,
         nargs=1,
         action=EnvDefault,
@@ -57,7 +57,7 @@ def parse_config() -> argparse.Namespace:
         help='database username',
         dest=DB_USER_KEY.lower()
     )
-    cmd_arg_parser.add_argument(
+    arg_parser.add_argument(
         '--' + DB_PASSWORD_KEY,
         nargs=1,
         action=EnvDefault,
@@ -67,7 +67,7 @@ def parse_config() -> argparse.Namespace:
         help='database user password',
         dest=DB_PASSWORD_KEY.lower()
     )
-    cmd_arg_parser.add_argument(
+    arg_parser.add_argument(
         '--' + DB_NAME_KEY,
         nargs=1,
         action=EnvDefault,
@@ -78,4 +78,4 @@ def parse_config() -> argparse.Namespace:
         dest=DB_NAME_KEY.lower()
     )
 
-    return cmd_arg_parser.parse_args()
+    return arg_parser.parse_args()
