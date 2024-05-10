@@ -60,7 +60,7 @@ async def serve(config: argparse.Namespace) -> None:
     prediction_server = PredictServer(config, queue, log_queue)
     predict_pb2_grpc.add_PredictServiceServicer_to_server(prediction_server, grpc_server)
 
-    listen_addr = f'localhost:{config.http}'
+    listen_addr = f'0.0.0.0:{config.http}'
     grpc_server.add_insecure_port(listen_addr)
     print(f'Starting grpc_server on {listen_addr}')
 

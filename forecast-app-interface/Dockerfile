@@ -10,12 +10,13 @@ FROM alpine:3.19 as run
 WORKDIR /app
 
 COPY --from=build /src/app .
+COPY --from=build /src/web ./web
 
-RUN adduser -D user
+RUN adduser --disabled-password newuser
 
-RUN chown user:user ./app
+RUN chown newuser:newuser ./app
 
-USER user
+USER newuser
 
-CMD ./app -http ${HTTP} -auth-service-address ${AUTH-SERVICE-ADDRESS}
+CMD ./app -http ${HTTP} -auth-service-address ${AUTH_SERVICE_ADDRESS} -predict-service-address ${PREDICT_SERVICE_ADDRESS}
 

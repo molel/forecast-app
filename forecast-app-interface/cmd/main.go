@@ -3,8 +3,6 @@ package main
 import (
 	"log"
 
-	_ "github.com/joho/godotenv/autoload"
-
 	"forecast-app-interface/config"
 	"forecast-app-interface/internal/app"
 )

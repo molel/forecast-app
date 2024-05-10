@@ -12,11 +12,11 @@ WORKDIR /app
 
 COPY --from=build /src/app .
 
-RUN adduser -D user
+RUN adduser --disabled-password newuser
 
-RUN chown user:user ./app
+RUN chown newuser:newuser ./app
 
-USER user
+USER newuser
 
 CMD ./app -http ${HTTP} -database-address ${DATABASE_ADDRESS} -database-name ${DATABASE_NAME}
 

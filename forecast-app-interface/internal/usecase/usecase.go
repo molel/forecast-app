@@ -1,10 +1,11 @@
 package usecase
 
 import (
-	"forecast-app-interface/internal/controller/gen/go/predict"
+	"fmt"
 	"log"
 
 	"forecast-app-interface/internal/controller/gen/go/auth"
+	"forecast-app-interface/internal/controller/gen/go/predict"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -24,7 +25,7 @@ func NewUseCase() *UseCase {
 func (u *UseCase) Init(authServiceAddress, predictServiceAddress string) error {
 	var err error
 
-	u.authConn, err = grpc.Dial(authServiceAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	u.authConn, err = grpc.Dial(fmt.Sprintf("dns:///%s", authServiceAddress), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		return err
 	}
@@ -32,7 +33,7 @@ func (u *UseCase) Init(authServiceAddress, predictServiceAddress string) error {
 
 	u.authClient = auth.NewAuthServiceClient(u.authConn)
 
-	u.predictConn, err = grpc.Dial(predictServiceAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	u.predictConn, err = grpc.Dial(fmt.Sprintf("dns:///%s", predictServiceAddress), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		return err
 	}
